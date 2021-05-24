@@ -1,4 +1,5 @@
-import soundex
+import utility
+import heapq
 
 class Fuzzy:
     def __init__(self):
@@ -13,13 +14,27 @@ class Fuzzy:
                 b = tmp[1:]
                 self.fuzzy[a] = b
         
-    def get_fuzzy(self,word):
-        sound = soundex.soundex(word)
+    def get_fuzzy(self,word,max_len=15):
+        sound = utility.soundex(word)
         if sound in self.fuzzy:
-            ans = self.fuzzy[sound][::]
-            if word in ans:
-                ans.remove(word)
+            ans = self.fuzzy[sound]
+
+            fuzzy = []
+            for obj in ans:
+                if obj != word and obj.isalpha() and len(obj) <= 10:
+                    fuzzy.append(obj)
+            rank = []
+            for obj in fuzzy:
+                r = utility.edit_dist(obj,word)
+                rank.append(r)
+
+            ans = []
+            data = heapq.nsmallest(max_len, enumerate(rank), key=lambda x:x[1])
+            idx, val = zip(*data)
+            for obj in idx:
+                ans.append(fuzzy[obj])
             return ans
+
         return []
 
 ##a = Fuzzy()

@@ -30,18 +30,9 @@ class Search:
         elif logic == "and_not":
             return self.boolean.get_docid_not(listA,listB)
 
-    def f_search(self,word):
-        fuzzy = self.fuzzy.get_fuzzy(word)
-        original = self.boolean.get_docid(word)
-        rank = []
-        for obj in fuzzy:
-            r = self.boolean.get_docid_and(original,self.boolean.get_docid(obj))
-            rank.append(r)
-
-        sorted_rank = sorted(enumerate(rank),key=lambda x:x[1])
-        idx = [i[0] for i in sorted_rank]
-        fuzzy = [fuzzy[i] for i in idx]
-        return fuzzy[::-1]
+    def f_search(self,word,max_len=15):
+        fuzzy = self.fuzzy.get_fuzzy(word,max_len)
+        return fuzzy
 
     def filter_docid(self,logic,lst,w1,w2,d = None):
         ans = []
@@ -86,30 +77,3 @@ class Search:
             ans.append(self.file_list[docid[obj]])
         return ans
 
-t = time.time()
-a = Search()
-a.load(2015)
-print(time.time() - t)
-print(len(a.file_list))
-la = a.get_docid("removed")
-print(len(la))
-lb = a.get_docid("root")
-print(len(lb))
-lc = a.b_search("and",la,lb)
-print(lc[0:10])
-print(len(lc))
-print(time.time() - t)
-b = a.output_by_date(lc)
-print(b)
-c = a.output_by_size(lc)
-print(c)
-print(time.time() - t)
-print(len(a.f_search("root")))
-print(time.time() - t)
-
-#lst = list(range(5000))
-lst = lc
-d = a.filter_docid("word",c,"ubuntu","good",10)
-print(len(d))
-print(d)
-print(time.time() - t)
