@@ -54,3 +54,44 @@ def edit_dist(word1,word2):
             delta = 0 if word1[i-1] == word2[j-1] else 1
             dp[i][j] = min(dp[i - 1][j - 1] + delta, min(dp[i-1][j] + 1, dp[i][j - 1] + 1))
     return dp[len1][len2]
+
+def get_window(file,w1,w2 = None,must = None):
+    para1 = -1
+    para2 = -1
+    content1 = ""
+    content2 = ""
+    ans = ""
+    cnt = 0
+    mdist = 1000000
+    name = file
+    if w2 == None:
+        w2 = w1
+    with open(name,"r",encoding="ISO8859-1") as f:
+        for line in f:
+            line = line.lower()
+            tmp = line.split()
+            for j in range(len(tmp)):
+                if len(tmp[j]) > 0 and tmp[j][0] in "<[":
+                    continue
+                for s in "()":
+                    tmp[j] = tmp[j].replace(s,"")
+                for s in " ,.:?!\'\n":
+                    tmp[j] = tmp[j].strip(s)
+                    
+            if must != None and must not in tmp:
+                continue
+            for j in range(len(tmp)):
+                if tmp[j] == w1:
+                    para1 = cnt
+                    content1 = line
+                if tmp[j] == w2:
+                    para2 = cnt
+                    content2 = line
+            if para1 == para2 and para1 == cnt:
+                return line
+            if para1 != -1 and para2 != -1 and abs(para1 - para2) < mdist:
+                mdist = abs(para1 - para2)
+                ans = content1 + content2
+                    
+            cnt += 1
+    return ans
