@@ -64,6 +64,8 @@ def get_window(file,w1,w2 = None,must = None):
     cnt = 0
     mdist = 1000000
     name = file
+    content1 = ""
+    content2 = ""
     if w2 == None:
         w2 = w1
     with open(name,"r",encoding="ISO8859-1") as f:
@@ -92,6 +94,25 @@ def get_window(file,w1,w2 = None,must = None):
             if para1 != -1 and para2 != -1 and abs(para1 - para2) < mdist:
                 mdist = abs(para1 - para2)
                 ans = content1 + content2
+            elif para1 == -1 and para2 != -1:
+                ans = content2
+            elif para1 != -1 and para2 == -1:
+                ans = content1
                     
             cnt += 1
+
     return ans
+def divide(s):
+    s=s.replace("("," ( ").replace(")"," ) ").replace("&"," & ").replace("|"," | ").replace("~"," ~ ").replace("AND"," & ").replace("OR"," | ").replace("NOT"," ~ ")
+    print(s)
+    return s.split(' ')
+def combine(ss):
+    s = ""
+    for i in ss:
+        s+=i
+    return s
+def list_replace(l,n,s):
+    for i in range(len(l)):
+        if l[i] ==n:
+            l[i]==s
+#divide("root&removed")

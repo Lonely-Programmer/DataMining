@@ -20,8 +20,6 @@ def test():
     c = a.output_by_size(lc)   #将docid转换为txt文件路径，并按照大小排列，默认15个，生成文件路径列表c
     print(c)
     print(time.time() - t)
-    print(a.output_window(c,"removed","without","be")[0:5])    #返c中的摘要信息
-    print(time.time() - t)
     f = a.f_search("rooot")    #返回与rooot发音相近且编辑距离最小的单词列表，默认15个
     print(f)
     print(time.time() - t)

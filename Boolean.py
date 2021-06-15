@@ -22,7 +22,8 @@ class Boolean:
                     b.append(int(obj))
                 self.word.append(a)
                 self.docid.append(b)
-
+    def get_length(self):
+        return len(self.docid)
     def get_docid(self,word):
         idx = self.binary_search_bisect(self.word,word)
         if idx == -1:
