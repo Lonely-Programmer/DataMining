@@ -50,19 +50,19 @@ class Search:
         ans = []
         if logic == "word":   #单词w1和w2的距离至多为d
             for obj in lst:
-                file = self.file_list[obj]
+                file = obj
                 flag = self.proximity.word_proximity(file,w1,w2,d)
                 if flag:
                     ans.append(obj)
         elif logic == "para":   #单词w1和w2必须在同一段（d参数无效）
             for obj in lst:
-                file = self.file_list[obj]
+                file = obj
                 flag = self.proximity.para_proximity(file,w1,w2)
                 if flag:
                     ans.append(obj)
         elif logic == "bracket":   #单词w1和w2必须在同一个括号内（d参数无效）
             for obj in lst:
-                file = self.file_list[obj]
+                file = obj
                 flag = self.proximity.bracket_proximity(file,w1,w2)
                 if flag:
                     ans.append(obj)
@@ -84,8 +84,12 @@ class Search:
         ans = []
         size = []
         max_len = min(max_len,len(docid))
+        if len(docid) > 5 * max_len:
+            import random
+            random.seed(0)
+            docid = random.sample(docid,5 * max_len)
         for obj in docid:
-            size.append(os.path.getsize(self.file_list[obj[0]]))
+            size.append(os.path.getsize(self.file_list[obj]))
         idx = list(map(size.index, heapq.nlargest(max_len,size)))
         for obj in idx:
             ans.append(self.file_list[docid[obj]])
